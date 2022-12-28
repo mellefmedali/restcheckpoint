@@ -4,8 +4,9 @@ var mongoose = require("mongoose")
 
 // activate environment variables
 var dotenv = require('dotenv')
-dotenv.config()
+dotenv.config({path : './config/.env'})
 let port = process.env.PORT
+mongoose.set('strictQuery', false)
 mongoose.connect(
     process.env.DATABASE_URL,
     null
