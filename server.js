@@ -10,8 +10,10 @@ let port = process.env.PORT
 mongoose.set('strictQuery', false)
 mongoose.connect(
     process.env.DATABASE_URL,
-    null
-    ,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    },
     (err) => {
         if (err) {
             console.log('error while connection to db --> : ', err)
@@ -19,6 +21,9 @@ mongoose.connect(
             console.log('connected successfully to the DB')
         }
     }
+
+
+    
 )
 
 let user = new personModel({
@@ -30,7 +35,15 @@ let user = new personModel({
 })
 user.save((e) => console.log(e.name, " saved !"))
 
-app.get('/getinfo')
+app.get('/usersList', function(req, res) {
+    var users = {};
+
+    users.find({}, function (err, user) {
+        users[user._id] = user;
+    });
+
+    res.send(users);
+});
 
 
 app.listen(port, () => console.log('app connected to port'))
